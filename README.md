@@ -6,15 +6,17 @@ Passwords, smart‑card options, multi‑monitor flags and dozens of other setti
 
 ---
 
-## Feature Highlights(v0.5.1)
+## Feature Highlights (v0.7.4)
 
 |Category|Details|
 |----------|---------|
-| **Security** | • Master vault unlocked with **Argon2id** (≈600K iterations PBKDF2 fallback)<br>• **TOTP 2‑factor** (Google Authenticator, Authy, 1Password)<br>• QR code shown automatically (*qrcode+Pillow*).<br>• Per‑file **HMAC‑SHA‑256** integrity; tamper ⇒ refuse to load<br>• Encrypted, password‑protected **`.rdpbak`** backup (vault + MAC + salts). |
-| **Profiles** | Nested group tree, tag search, clone, JSON backup/restore. |
-| **RDP options** | Clipboard, sound, USB, smart‑card, TLSv1.2 enforce, multi‑monitor, dynamic‑resolution, extra CLI flags. |
-| **Sessions** | Launch `xfreerdp` in its own **process‑group**; GUI can list / kill orphan sessions; optional `psutil` auto‑clean. |
-| **UI / UX** | Dark mode via **ttkbootstrap**, command preview, QR pop‑up, theme‑aware icons. |
+| **Security** | • Master vault unlocked with **Argon2id** (≈600K iterations PBKDF2 fallback)<br>• **TOTP 2‑factor** (Google Authenticator, Authy, 1Password) with **24‑hour unlock cache**<br>• QR code shown automatically (*qrcode+Pillow*).<br>• Per‑file **HMAC‑SHA‑256** integrity; tamper ⇒ refuse to load<br>• Encrypted, password‑protected **`.rdpbak`** backup (vault + MAC + salts) with safe-path validation.<br>• In‑app **Change Master Password…** re‑encrypts all profiles + TOTP secret. |
+| **Profiles** | Nested group tree with drag‑and‑drop between folders, tag search, clone, JSON backup/restore, **favorites**, **profile templates**, and bulk operations (delete / clone / export to `.rdp`). |
+| **RDP options** | Clipboard, sound, USB, smart‑card, TLSv1.2 enforce, multi‑monitor, dynamic‑resolution, extra CLI flags (validated to avoid shell injection). |
+| **Sessions** | Launch `xfreerdp` in its own **process‑group**; GUI can list / kill orphan sessions; automatic cleanup loop; optional `psutil` orphan scan. |
+| **History / CLI** | Connection history viewer, **Recent** and **Favorites** menus, plus a CLI: `python XFreeRDP-Manager.py --list/--connect NAME/--test NAME`. |
+| **Import / Export** | One‑click import from **Remmina** (`.remmina`), **Windows `.rdp`**, **CSV**, and **Terminals Favorites.xml** (RDP entries only); single or bulk export to `.rdp`. |
+| **UI / UX** | Dark mode via **ttkbootstrap**, modern button layout, command preview, tooltips on all major actions, window‑state restore, and theme‑aware icons. |
 
 ---
 
@@ -38,6 +40,10 @@ pip install   cryptography argon2-cffi   ttkbootstrap   pyotp qrcode[pil] pillow
 git clone https://github.com/Marzlio/XFreeRDP-Manager.git
 cd XFreeRDP-Manager
 python XFreeRDP-Manager.py
+ # or use the CLI:
+ #   list profiles:   python XFreeRDP-Manager.py --list
+ #   connect:         python XFreeRDP-Manager.py --connect "My Profile"
+ #   test connection: python XFreeRDP-Manager.py --test "My Profile"
 ```
 
 ### 4.Building a single‑file executable (PyInstaller≥6)
@@ -78,8 +84,6 @@ The resulting `dist/XFreeRDP-Manager` (or `.exe`) contains all runtime libraries
 ## Planned / Nice‑to‑Have
 
 * FIDO2 / YubiKey challenge‑response unlock  
-* CLI interface (`xfreemgr --connect my/server`)  
-* Importers for Remmina and Windows `.rdp` files  
 * Structured JSON logging with rotation  
 * Auto‑update notifier via GitHub releases  
 
