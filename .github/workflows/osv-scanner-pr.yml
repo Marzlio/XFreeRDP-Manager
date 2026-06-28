@@ -15,5 +15,6 @@ jobs:
   scan-pr:
     uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@v2.3.8
     with:
+      upload-sarif: false
       scan-args: |-
         --lockfile=./requirements.txt
