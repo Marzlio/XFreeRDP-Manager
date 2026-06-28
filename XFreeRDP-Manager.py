@@ -1357,8 +1357,18 @@ class RDPApp(ttk.Window):
     def _connect(self):
         server = self.server_entry.get().strip()
         user = self.user_entry.get().strip()
+        domain = self.domain_entry.get().strip()
         if not server or not user:
             messagebox.showerror("Error", "Server & Username required", parent=self)
+            return
+        if not _validate_server(server):
+            messagebox.showerror("Error", "Invalid server address format", parent=self)
+            return
+        if not _validate_username(user):
+            messagebox.showerror("Error", "Invalid username format", parent=self)
+            return
+        if domain and not _validate_domain(domain):
+            messagebox.showerror("Error", "Invalid domain format", parent=self)
             return
         try:
             cmd = self._build_cmd()
